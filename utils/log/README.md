@@ -1,11 +1,11 @@
-# `core`
+# `log`
 
 > TODO: description
 
 ## Usage
 
 ```
-const core = require('core');
+const log = require('log');
 
 // TODO: DEMONSTRATE API
 ```
