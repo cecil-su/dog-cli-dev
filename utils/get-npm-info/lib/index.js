@@ -51,5 +51,6 @@ async function getNpmSemverVersions(baseVersion, name, registry) {
 module.exports = {
     getNpmInfo,
     getNpmVersions,
-    getNpmSemverVersions
+    getNpmSemverVersions,
+    getDefaultRegistry
 }

@@ -23,9 +23,10 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
+    "@dog-cli/exec": "file:../exec",
     "@dog-cli/get-npm-info": "file:../../utils/get-npm-info",
-    "@dog-cli/log": "file:../../utils/log",
     "@dog-cli/init": "file:../../commands/init",
+    "@dog-cli/log": "file:../../utils/log",
     "colors": "^1.4.0",
     "commander": "^7.0.0",
     "dotenv": "^8.2.0",

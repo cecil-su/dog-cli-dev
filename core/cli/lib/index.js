@@ -10,19 +10,15 @@ const pathExists = require('path-exists').sync
 const commander = require('commander')
 const log = require('@dog-cli/log')
 const commandInit = require('@dog-cli/init')
+const exec = require('@dog-cli/exec')
 const pkg = require('../package.json')
-const constant = require('./const')
+const constant = require('./const');
 
 const program = new commander.Command()
 
 async function core() {
     try {
-        checkPkgVersion()
-        checkNodeVersion()
-        checkRoot()
-        checkUserHome()
-        checkEnv()
-        await checkGlobalUpdate()
+        await prepare()
         registerCommand()
     } catch (e) {
         log.error(e.message)
@@ -36,11 +32,12 @@ function registerCommand() {
         .usage('<command> [options]')
         .version(pkg.version, '-v, --version', 'output the version number')
         .option('-d, --debug', '是否开启调试模式', false)
+        .option('-tp, --targetPath <path>', '是否指定本地调试文件路径', '')
     
     program
         .command('init [name]')
         .option('-f, --force', '是否强制初始化项目')
-        .action(commandInit)
+        .action(exec)
     // 开启debug模式
     program.on('option:debug', function() {
         const options = program.opts()
@@ -50,6 +47,13 @@ function registerCommand() {
            process.env.DOG_CLI_LOG_LEVEL = 'info' 
         }
         log.level = process.env.DOG_CLI_LOG_LEVEL
+    })
+    // 
+    program.on('option:targetPath', function() {
+        const options = program.opts()
+        if (options.targetPath) {
+            process.env.DOG_CLI_TARGET_PATH = options.targetPath
+        }
     })
     // 未知命令的监听
     program.on('command:*', function(operands) {
@@ -64,6 +68,15 @@ function registerCommand() {
     }
 
     program.parse(process.argv)
+}
+
+async function prepare() {
+    checkPkgVersion()
+    checkNodeVersion()
+    checkRoot()
+    checkUserHome()
+    checkEnv()
+    await checkGlobalUpdate()
 }
 
 async function checkGlobalUpdate() {
